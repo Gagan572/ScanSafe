@@ -1,9 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { v4 as uuidv4 } from 'uuid';
-import { readJson, writeJson, appendJson } from '../../../lib/fs';
+import { createScan, getQRCodeById, getScansByQrId, updateQRCode } from '../../../lib/db';
 import { verifyToken } from '../../../lib/qr';
 import { recordBlockchainEvent } from '../../../lib/blockchain';
-import type { QRCodeRecord, ScanRecord, Role } from '../../../lib/types';
+import type { ScanRecord, Role } from '../../../lib/types';
 
 function parseLocation(input: any): { lat: number; lon: number } | undefined {
   if (!input) return undefined;
@@ -58,8 +58,7 @@ export default async function handler(
     if (!verification.valid || !verification.payload) {
       return res.status(200).json({ status: 'INVALID', error: verification.error });
     }
-    const qrs = await readJson<QRCodeRecord[]>('qrcodes.json', []);
-    const qr = qrs.find((q) => q.id === verification.payload!.id);
+    const qr = await getQRCodeById(verification.payload.id);
     if (!qr) {
       return res.status(200).json({ status: 'INVALID', error: 'QR not found' });
     }
@@ -84,16 +83,13 @@ export default async function handler(
   }
 
   const payload = verification.payload;
-  const qrs = await readJson<QRCodeRecord[]>('qrcodes.json', []);
-  const idx = qrs.findIndex((q) => q.id === payload.id);
-  if (idx === -1) {
+  const qr = await getQRCodeById(payload.id);
+  if (!qr) {
     return res.status(200).json({ status: 'INVALID', error: 'QR not found' });
   }
 
-  const qr = qrs[idx];
   const now = Date.now();
-  const scans = await readJson<ScanRecord[]>('scans.json', []);
-  const prevScans = scans.filter((s) => s.qrId === qr.id);
+  const prevScans = await getScansByQrId(qr.id);
 
   const stateField = getStateField(roleValue);
   let isDuplicate = false;
@@ -143,8 +139,7 @@ export default async function handler(
       (qr.states as any)[stateField] = now;
     }
     qr.scannedCount += 1;
-    qrs[idx] = qr;
-    await writeJson('qrcodes.json', qrs);
+    await updateQRCode(qr);
   }
 
   const bc = await recordBlockchainEvent({
@@ -161,7 +156,7 @@ export default async function handler(
 
   scanRecord.txHash = bc.txHash;
 
-  await appendJson<ScanRecord>('scans.json', scanRecord);
+  await createScan(scanRecord);
 
   const status = isDuplicate ? 'DUPLICATE' : 'AUTHENTIC';
 

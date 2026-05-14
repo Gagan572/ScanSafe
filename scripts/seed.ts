@@ -1,6 +1,14 @@
 import path from 'path';
 import dotenv from 'dotenv';
-import { readJson, writeJson } from '../lib/fs';
+import {
+  createBatch,
+  createProduct,
+  createQRCodes,
+  ensureSeedManufacturer,
+  getProductById,
+  getProducts,
+  getQRCodesByBatch,
+} from '../lib/db';
 import { createSignedQrRecord } from '../lib/qr';
 import type { Product, QRCodeRecord } from '../lib/types';
 
@@ -12,8 +20,9 @@ async function main() {
   }
 
   console.log('Seeding demo data...');
+  await ensureSeedManufacturer();
 
-  const products = await readJson<Product[]>('products.json', []);
+  const products = await getProducts();
 
   let product: Product;
   if (products.length === 0) {
@@ -24,7 +33,7 @@ async function main() {
       canonicalImageUrl: '/uploads/demo-product.png',
       batches: [],
     };
-    products.push(product);
+    await createProduct(product);
   } else {
     product = products[0];
   }
@@ -37,13 +46,14 @@ async function main() {
       size: 10,
       createdAt: Date.now(),
     });
+    await createBatch(product.id, product.batches[product.batches.length - 1]);
   }
 
-  await writeJson('products.json', products);
+  product = (await getProductById(product.id)) || product;
 
-  const existingQrs = await readJson<QRCodeRecord[]>('qrcodes.json', []);
+  const existingQrs = await getQRCodesByBatch(batchId);
 
-  const toCreate = 10 - existingQrs.filter((q) => q.batchId === batchId).length;
+  const toCreate = 10 - existingQrs.length;
   const newRecords: QRCodeRecord[] = [];
   for (let i = 0; i < toCreate; i += 1) {
     const rec = await createSignedQrRecord({ productId: product.id, batchId });
@@ -51,10 +61,10 @@ async function main() {
   }
 
   if (newRecords.length > 0) {
-    await writeJson('qrcodes.json', existingQrs.concat(newRecords));
+    await createQRCodes(newRecords);
   }
 
-  console.log('Seed complete. Product, batch, and QR codes are ready.');
+  console.log('Seed complete. SQL database, product, batch, and QR codes are ready.');
 }
 
 main().catch((err) => {

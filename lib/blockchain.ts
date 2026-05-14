@@ -1,7 +1,7 @@
 import { ethers } from 'ethers';
 import crypto from 'crypto';
 import { v4 as uuidv4 } from 'uuid';
-import { appendJson } from './fs';
+import { createBlockchainEvent } from './db';
 import { BlockchainEvent } from './types';
 
 let provider: ethers.providers.JsonRpcProvider | null = null;
@@ -55,7 +55,7 @@ export async function recordBlockchainEvent(params: {
         timestamp,
       };
 
-      await appendJson<BlockchainEvent>('blockchain.json', event);
+      await createBlockchainEvent(event);
 
       return { txHash: tx.hash, blockNumber, timestamp };
     } catch {
@@ -75,7 +75,7 @@ export async function recordBlockchainEvent(params: {
     timestamp,
   };
 
-  await appendJson<BlockchainEvent>('blockchain.json', event);
+  await createBlockchainEvent(event);
 
   return { txHash, blockNumber: 0, timestamp };
 }

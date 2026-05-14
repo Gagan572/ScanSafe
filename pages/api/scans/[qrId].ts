@@ -1,6 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { readJson } from '../../../lib/fs';
-import type { ScanRecord } from '../../../lib/types';
+import { getScansByQrId } from '../../../lib/db';
 
 export default async function handler(
   req: NextApiRequest,
@@ -15,7 +14,6 @@ export default async function handler(
     return res.status(400).json({ error: 'qrId is required' });
   }
 
-  const scans = await readJson<ScanRecord[]>('scans.json', []);
-  const filtered = scans.filter((s) => s.qrId === qrId);
-  return res.status(200).json(filtered);
+  const scans = await getScansByQrId(qrId);
+  return res.status(200).json(scans);
 }

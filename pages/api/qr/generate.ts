@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { readJson, writeJson } from '../../../lib/fs';
-import type { Product, QRCodeRecord } from '../../../lib/types';
+import { createQRCodes, getProductById } from '../../../lib/db';
+import type { QRCodeRecord } from '../../../lib/types';
 import { createSignedQrRecord } from '../../../lib/qr';
 
 function getRequestAppUrl(req: NextApiRequest): string {
@@ -36,10 +36,12 @@ export default async function handler(
     return res.status(400).json({ error: 'count too large for demo (max 500)' });
   }
 
-  const products = await readJson<Product[]>('products.json', []);
-  const product = products.find((p) => p.id === productId);
+  const product = await getProductById(String(productId));
   if (!product) {
     return res.status(400).json({ error: 'Unknown productId' });
+  }
+  if (!product.batches.some((batch) => batch.id === batchId)) {
+    return res.status(400).json({ error: 'Unknown batchId for product' });
   }
 
   const appUrl = getRequestAppUrl(req);
@@ -49,9 +51,7 @@ export default async function handler(
     records.push(rec);
   }
 
-  const existing = await readJson<QRCodeRecord[]>('qrcodes.json', []);
-  const all = existing.concat(records);
-  await writeJson('qrcodes.json', all);
+  await createQRCodes(records);
 
   return res.status(200).json({
     tokens: records.map((r) => r.token),

@@ -5,9 +5,8 @@ import path from 'path';
 import crypto from 'crypto';
 import { v4 as uuidv4 } from 'uuid';
 import { verifyToken } from '../../../lib/qr';
-import { appendJson } from '../../../lib/fs';
-import type { AIReport, Product } from '../../../lib/types';
-import { readJson } from '../../../lib/fs';
+import { createAIReport, getProducts, getQRCodeById } from '../../../lib/db';
+import type { AIReport } from '../../../lib/types';
 
 export const config = {
   api: {
@@ -25,16 +24,16 @@ export default async function handler(
 
   const form = formidable({ multiples: false });
 
-  const { fields, files } = await new Promise<{ fields: formidable.Fields; files: formidable.Files }>(
+  const { fields, files } = await new Promise<{ fields: any; files: any }>(
     (resolve, reject) => {
-      form.parse(req, (err, fld, fls) => {
+      form.parse(req, (err: any, fld: any, fls: any) => {
         if (err) reject(err);
         else resolve({ fields: fld, files: fls });
       });
     },
   );
 
-  const fileAny = (files.image || Object.values(files)[0]) as formidable.File | formidable.File[] | undefined;
+  const fileAny = files.image || Object.values(files)[0];
   const file = Array.isArray(fileAny) ? fileAny[0] : fileAny;
 
   if (!file) {
@@ -53,9 +52,8 @@ export default async function handler(
     const verification = verifyToken(tokenField);
     if (verification.valid && verification.payload) {
       qrId = verification.payload.id;
-      const products = await readJson<Product[]>('products.json', []);
-      const qrs = await readJson<any[]>('qrcodes.json', []);
-      const qr = qrs.find((q) => q.id === qrId);
+      const products = await getProducts();
+      const qr = await getQRCodeById(qrId);
       if (qr && qr.productId) {
         productId = qr.productId;
       } else if (products.length > 0) {
@@ -92,7 +90,7 @@ export default async function handler(
     createdAt: Date.now(),
   };
 
-  await appendJson<AIReport>('ai_reports.json', report);
+  await createAIReport(report);
 
   return res.status(200).json({
     verdict,

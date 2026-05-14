@@ -1,1 +1,11 @@
-{}
+{
+  "/_app": "pages/_app.js",
+  "/_error": "pages/_error.js",
+  "/_document": "pages/_document.js",
+  "/customer": "pages/customer.js",
+  "/manufacturer": "pages/manufacturer.js",
+  "/admin": "pages/admin.js",
+  "/api/qrs": "pages/api/qrs.js",
+  "/api/products": "pages/api/products.js",
+  "/api/qr/generate": "pages/api/qr/generate.js"
+}

@@ -1,6 +1,6 @@
 # ScanSafe-MVP
 
-A minimal Next.js + TypeScript demo for signed product QR codes, duplicate detection, mock AI image verification, and optional blockchain logging. All data is stored in local JSON files under `data/`.
+A minimal Next.js + TypeScript demo for signed product QR codes, duplicate detection, mock AI image verification, and optional blockchain logging. Application data is stored in a local SQL database at `data/scansafe.sqlite`.
 
 ## Tech Stack
 
@@ -9,10 +9,11 @@ A minimal Next.js + TypeScript demo for signed product QR codes, duplicate detec
 - **QR generation**: [`qrcode`](https://www.npmjs.com/package/qrcode)
 - **Crypto signing**: HMAC-SHA256 via Node `crypto`
 - **Token format**: `base64url(payload) + '.' + base64url(signature)`
-- **Storage**: JSON files under `data/`
-  - `products.json`, `qrcodes.json`, `scans.json`, `blockchain.json`, `ai_reports.json`
+- **Storage**: SQLite database through `sql.js`
+  - Main database file: `data/scansafe.sqlite`
+  - Main entities: `manufacturers`, `products`, `batches`, `qrcodes`, `scans`, `blockchain_events`, `ai_reports`
 - **Optional image storage**: saved under `public/uploads`
-- **Blockchain**: [`ethers`](https://www.npmjs.com/package/ethers`) if RPC + key are configured, otherwise mocked tx entries are appended to `blockchain.json`
+- **Blockchain**: [`ethers`](https://www.npmjs.com/package/ethers`) if RPC + key are configured, otherwise mocked tx entries are stored in `blockchain_events`
 
 ## Setup
 
@@ -38,13 +39,13 @@ A minimal Next.js + TypeScript demo for signed product QR codes, duplicate detec
    Optional:
 
    - `GENINI_API_KEY` – placeholder for external image hosting (not required; app stores images locally under `public/uploads`)
-   - `WEB3_RPC_URL`, `WEB3_PRIVATE_KEY` – if set, real transactions are sent with `ethers` and recorded in `blockchain.json`.
+   - `WEB3_RPC_URL`, `WEB3_PRIVATE_KEY` - if set, real transactions are sent with `ethers` and recorded in SQL.
 
 3. **Seed demo data**
 
    The seed script creates:
 
-   - 1 manufacturer (stored in `data/manufacturers.json`)
+   - 1 manufacturer
    - 1 product with SKU `SS-DEMO-001`
    - 1 batch (`Demo Batch 1`)
    - Up to 10 signed QR codes for that batch
@@ -79,7 +80,7 @@ Then open:
   - Signs it with `HMAC_SHA256(payload, PRODUCT_QR_SECRET)`.
   - Forms token: `base64url(payload) + '.' + base64url(signature)`.
   - Generates a PNG QR that encodes `NEXT_PUBLIC_APP_URL/api/qr/verify?token=...`.
-  - Persists QR entries in `data/qrcodes.json` with QR image dataURLs.
+  - Persists QR entries in the SQL `qrcodes` table with QR image data URLs.
 
 ### 2. Supply Chain Scan – Manufacturer / Distributor / Retailer
 
@@ -89,11 +90,11 @@ Then open:
 - Fill in actor name (and optional ID / location).
 - Submit to call `POST /api/qr/verify` which:
   - Verifies the HMAC-SHA256 signature using `PRODUCT_QR_SECRET`.
-  - Looks up the QR by `payload.id` in `qrcodes.json`.
-  - Records a scan entry in `scans.json`.
+  - Looks up the QR by `payload.id` in the `qrcodes` table.
+  - Records a scan entry in the `scans` table.
   - Checks if that role’s lifecycle state is already set; if so, marks `isDuplicate: true` and returns `status: "DUPLICATE"`.
   - Otherwise updates the appropriate state (`manufactured`, `distributed`, `retailed`) and increments `scannedCount`.
-  - Optionally sends or simulates a blockchain tx and records it in `blockchain.json`.
+  - Optionally sends or simulates a blockchain tx and records it in `blockchain_events`.
 
 ### 3. Customer Verify & Claim
 
@@ -103,7 +104,7 @@ Then open:
 - If a name is provided, the UI calls `POST /api/claim` which:
   - Verifies token.
   - Attaches an `owner` structure to the corresponding QR record.
-  - Adds a `role = 'customer'` scan entry in `scans.json`.
+  - Adds a `role = 'customer'` scan entry in `scans`.
   - If the owner is already set, marks the claim as duplicate and returns `status: "DUPLICATE"`.
 
 If no name is provided, the page calls `POST /api/qr/verify` with `role='customer'` to just log a verification without ownership metadata.
@@ -132,7 +133,7 @@ Duplicate / anomaly logic (demo):
   - The API reads the image bytes, computes a simple hash (SHA-256) as a stand-in for a perceptual hash.
   - Optionally decodes the token to link the report to a QR/product.
   - Simulates an AI verdict (`AUTHENTIC` or `SUSPECT`) with a random confidence in `[0.5, 1.0]`.
-  - Stores a report in `data/ai_reports.json` and copies the image to `public/uploads/`.
+  - Stores a report in `ai_reports` and copies the image to `public/uploads/`.
 - The UI displays verdict, confidence, reasons, and the stored image URL.
 
 ## Blockchain Demo Behavior
@@ -140,20 +141,57 @@ Duplicate / anomaly logic (demo):
 - If **`WEB3_RPC_URL`** and **`WEB3_PRIVATE_KEY`** are set:
   - The backend uses `ethers` to send a simple transaction from the configured wallet to itself.
   - Tx `data` is a SHA-256 hash of JSON `{ qrId, eventType, ts, metadata }`.
-  - It waits for 1 confirmation and records `{ txHash, blockNumber, timestamp }` along with a `BlockchainEvent` in `blockchain.json`.
+  - It waits for 1 confirmation and records `{ txHash, blockNumber, timestamp }` along with a `BlockchainEvent` row.
 - If not set:
   - A mocked transaction is generated: `txHash = 'MOCK_' + randomHex`, `blockNumber = 0`.
-  - The mock event is still appended to `blockchain.json`.
+  - The mock event is still inserted into `blockchain_events`.
 
-## JSON Data Shapes
+## SQL Data Model
 
-- **`qrcodes.json`**: `QRCodeRecord[]`
-- **`scans.json`**: `ScanRecord[]`
-- **`products.json`**: `Product[]`
-- **`blockchain.json`**: `BlockchainEvent[]`
-- **`ai_reports.json`**: `AIReport[]`
+- **`manufacturers`**: manufacturer identity and license details
+- **`products`**: product catalog with SKU and manufacturer reference
+- **`batches`**: product batch records
+- **`qrcodes`**: signed QR tokens and lifecycle state
+- **`scans`**: scan history, actor, role, duplicate flag, anomaly score
+- **`blockchain_events`**: transaction/audit records
+- **`ai_reports`**: image hash, verdict, confidence, and reasons
 
 (See `lib/types.ts` for exact TypeScript interfaces.)
+
+## All SQL Queries for DBMS Submission
+
+All main SQL queries used in this project are documented here:
+
+- [`SQL_QUERIES_AND_DATA_GUIDE.md`](./SQL_QUERIES_AND_DATA_GUIDE.md)
+
+In GitHub, open that file to show the DBMS SQL part of the project. It includes:
+
+- `CREATE TABLE` queries
+- `INSERT` queries
+- `SELECT` queries
+- `UPDATE` queries
+- Entity list
+- Table relationships
+- API route to table mapping
+- Live data locations
+
+The documented SQL covers these tables:
+
+- `manufacturers`
+- `products`
+- `batches`
+- `qrcodes`
+- `scans`
+- `blockchain_events`
+- `ai_reports`
+
+The SQL integration code is in:
+
+- [`lib/db.ts`](./lib/db.ts)
+
+Live application data is stored in:
+
+- `data/scansafe.sqlite`
 
 ## Demo Walkthrough
 
@@ -185,10 +223,10 @@ Duplicate / anomaly logic (demo):
 7. **AI verify demo**
    - Go to `/ai-verify`.
    - Upload any image, optionally with a QR token.
-   - Observe the mock verdict and confidence; the report is persisted to `ai_reports.json`.
+   - Observe the mock verdict and confidence; the report is persisted to SQL.
 
 ## Notes
 
 - This is an MVP-style prototype; no authentication or role management is implemented.
-- All data is local JSON; delete files in `data/` to reset the environment.
-- The QR images are stored as PNG data URLs inside `qrcodes.json` for simplicity.
+- All app data is stored locally in `data/scansafe.sqlite`; delete that file to reset the SQL database.
+- The QR images are stored as PNG data URLs inside the `qrcodes` table for simplicity.
