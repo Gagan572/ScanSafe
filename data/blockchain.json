@@ -110,5 +110,367 @@
     "txHash": "MOCK_05a19bbe47509a85",
     "blockNumber": 0,
     "timestamp": 1771686893441
+  },
+  {
+    "id": "a24ab929-dbed-4ea3-975e-fd2d5f1173e7",
+    "qrId": "9bd23638-b083-4163-821a-73f23d5fe809",
+    "eventType": "SCAN",
+    "metadata": {
+      "role": "manufacturer",
+      "actorId": "Bhuvi",
+      "actorName": "Bhuvi",
+      "isDuplicate": false
+    },
+    "txHash": "MOCK_a9c463d0e8ebb683",
+    "blockNumber": 0,
+    "timestamp": 1778769917291
+  },
+  {
+    "id": "f690e9c7-b794-491a-90f6-f8cbec4576f8",
+    "qrId": "9bd23638-b083-4163-821a-73f23d5fe809",
+    "eventType": "SCAN",
+    "metadata": {
+      "role": "distributor",
+      "actorId": "Bhuvi",
+      "actorName": "Bhuvi",
+      "isDuplicate": false
+    },
+    "txHash": "MOCK_e525f2aa5a7dcbca",
+    "blockNumber": 0,
+    "timestamp": 1778769944320
+  },
+  {
+    "id": "47df42f2-cbbe-4fe1-99a1-152f72e8f6a3",
+    "qrId": "9bd23638-b083-4163-821a-73f23d5fe809",
+    "eventType": "SCAN",
+    "metadata": {
+      "role": "retailer",
+      "actorId": "Bhuvi",
+      "actorName": "Bhuvi",
+      "isDuplicate": false
+    },
+    "txHash": "MOCK_750d53d313b435e2",
+    "blockNumber": 0,
+    "timestamp": 1778769950686
+  },
+  {
+    "id": "027aa77d-b425-4fd8-b30e-ac3eebbe124c",
+    "qrId": "9bd23638-b083-4163-821a-73f23d5fe809",
+    "eventType": "SCAN",
+    "metadata": {
+      "role": "customer",
+      "actorId": "Bhuvi",
+      "actorName": "Bhuvi",
+      "isDuplicate": false
+    },
+    "txHash": "MOCK_6b13bfcb7ea710ba",
+    "blockNumber": 0,
+    "timestamp": 1778769954415
+  },
+  {
+    "id": "1f710fc1-5784-4ea0-9809-1c0b6a9a39c6",
+    "qrId": "9bd23638-b083-4163-821a-73f23d5fe809",
+    "eventType": "SCAN_DUPLICATE",
+    "metadata": {
+      "role": "customer",
+      "actorId": "Bhuvi",
+      "actorName": "Bhuvi",
+      "isDuplicate": true
+    },
+    "txHash": "MOCK_d63a8ff5274a45ff",
+    "blockNumber": 0,
+    "timestamp": 1778769957830
+  },
+  {
+    "id": "790f5963-d3a5-4740-a262-b39d373d7ef4",
+    "qrId": "9bd23638-b083-4163-821a-73f23d5fe809",
+    "eventType": "SCAN_DUPLICATE",
+    "metadata": {
+      "role": "customer",
+      "actorId": "Bhuvi",
+      "actorName": "Bhuvi",
+      "isDuplicate": true
+    },
+    "txHash": "MOCK_0c5ae6f7f3ae2b11",
+    "blockNumber": 0,
+    "timestamp": 1778769967881
+  },
+  {
+    "id": "dfd2f52d-8754-47ea-85c8-576b38c875fd",
+    "qrId": "9bd23638-b083-4163-821a-73f23d5fe809",
+    "eventType": "SCAN_DUPLICATE",
+    "metadata": {
+      "role": "customer",
+      "actorId": "customer",
+      "actorName": "Customer",
+      "isDuplicate": true
+    },
+    "txHash": "MOCK_ace643d0a62844c3",
+    "blockNumber": 0,
+    "timestamp": 1778770012813
+  },
+  {
+    "id": "962dcb64-f231-426e-8c5a-d5c73d181c8f",
+    "qrId": "3716f6b5-35fa-4316-af72-dd0dbfd24e71",
+    "eventType": "SCAN",
+    "metadata": {
+      "role": "manufacturer",
+      "actorId": "Man",
+      "actorName": "Man",
+      "isDuplicate": false
+    },
+    "txHash": "MOCK_dca5c2493a0025f0",
+    "blockNumber": 0,
+    "timestamp": 1778770117461
+  },
+  {
+    "id": "aa8bd3f0-45ba-4457-b1ac-c912d8ffb96e",
+    "qrId": "3716f6b5-35fa-4316-af72-dd0dbfd24e71",
+    "eventType": "SCAN",
+    "metadata": {
+      "role": "distributor",
+      "actorId": "Dist",
+      "actorName": "Dist",
+      "isDuplicate": false
+    },
+    "txHash": "MOCK_d4694fe9379b65fa",
+    "blockNumber": 0,
+    "timestamp": 1778770140013
+  },
+  {
+    "id": "8574d7ad-518a-47a0-aa7c-8441572a651c",
+    "qrId": "3716f6b5-35fa-4316-af72-dd0dbfd24e71",
+    "eventType": "SCAN",
+    "metadata": {
+      "role": "retailer",
+      "actorId": "Ret",
+      "actorName": "Ret",
+      "isDuplicate": false
+    },
+    "txHash": "MOCK_914b64f6d7565ffc",
+    "blockNumber": 0,
+    "timestamp": 1778770157376
+  },
+  {
+    "id": "160d1607-34bd-474f-80a9-475975047767",
+    "qrId": "3716f6b5-35fa-4316-af72-dd0dbfd24e71",
+    "eventType": "SCAN",
+    "metadata": {
+      "role": "customer",
+      "actorId": "Bhuvi",
+      "actorName": "Bhuvi",
+      "isDuplicate": false
+    },
+    "txHash": "MOCK_9095d6c32f9dc4a8",
+    "blockNumber": 0,
+    "timestamp": 1778770179100
+  },
+  {
+    "id": "cdbf3f07-fb1e-47bc-87e8-1d6d0ed6ba7c",
+    "qrId": "3716f6b5-35fa-4316-af72-dd0dbfd24e71",
+    "eventType": "SCAN_DUPLICATE",
+    "metadata": {
+      "role": "customer",
+      "actorId": "customer",
+      "actorName": "Customer",
+      "isDuplicate": true
+    },
+    "txHash": "MOCK_4b91bea41f9b8464",
+    "blockNumber": 0,
+    "timestamp": 1778770195918
+  },
+  {
+    "id": "ac261776-d325-4da6-a920-44bd53691bc4",
+    "qrId": "df215d60-e270-4bb5-acde-8efa195c654c",
+    "eventType": "SCAN",
+    "metadata": {
+      "role": "manufacturer",
+      "actorId": "Manuf",
+      "actorName": "Manuf",
+      "isDuplicate": false
+    },
+    "txHash": "MOCK_37117936b5bfc233",
+    "blockNumber": 0,
+    "timestamp": 1778770351116
+  },
+  {
+    "id": "4825ffb5-d462-4dd6-b523-a0030061106c",
+    "qrId": "df215d60-e270-4bb5-acde-8efa195c654c",
+    "eventType": "SCAN",
+    "metadata": {
+      "role": "distributor",
+      "actorId": "D",
+      "actorName": "D",
+      "isDuplicate": false
+    },
+    "txHash": "MOCK_214fcea0443531d9",
+    "blockNumber": 0,
+    "timestamp": 1778770371721
+  },
+  {
+    "id": "5d40def2-af83-4d0c-a862-3a08994855ad",
+    "qrId": "df215d60-e270-4bb5-acde-8efa195c654c",
+    "eventType": "SCAN",
+    "metadata": {
+      "role": "retailer",
+      "actorId": "R",
+      "actorName": "R",
+      "isDuplicate": false
+    },
+    "txHash": "MOCK_af06ab32eeac6610",
+    "blockNumber": 0,
+    "timestamp": 1778770381637
+  },
+  {
+    "id": "16c72b1f-56a9-4c01-8111-751ef358817a",
+    "qrId": "df215d60-e270-4bb5-acde-8efa195c654c",
+    "eventType": "SCAN",
+    "metadata": {
+      "role": "customer",
+      "actorId": "Bhuvi",
+      "actorName": "Bhuvi",
+      "isDuplicate": false
+    },
+    "txHash": "MOCK_a9167e84074710ca",
+    "blockNumber": 0,
+    "timestamp": 1778770396495
+  },
+  {
+    "id": "c4a67126-6aad-48d1-b691-c3e33f7fad66",
+    "qrId": "df215d60-e270-4bb5-acde-8efa195c654c",
+    "eventType": "SCAN_DUPLICATE",
+    "metadata": {
+      "role": "customer",
+      "actorId": "Bhuvi",
+      "actorName": "Bhuvi",
+      "isDuplicate": true
+    },
+    "txHash": "MOCK_e43150ec3a5e244f",
+    "blockNumber": 0,
+    "timestamp": 1778770409024
+  },
+  {
+    "id": "789b8794-a5cd-4284-8ff6-ab58a2b522ca",
+    "qrId": "df215d60-e270-4bb5-acde-8efa195c654c",
+    "eventType": "SCAN_DUPLICATE",
+    "metadata": {
+      "role": "customer",
+      "actorId": "customer",
+      "actorName": "Customer",
+      "isDuplicate": true
+    },
+    "txHash": "MOCK_6025ea943be71728",
+    "blockNumber": 0,
+    "timestamp": 1778770428053
+  },
+  {
+    "id": "04e28647-c4fa-41ff-8df3-4ae4ff140449",
+    "qrId": "df215d60-e270-4bb5-acde-8efa195c654c",
+    "eventType": "SCAN_DUPLICATE",
+    "metadata": {
+      "role": "customer",
+      "actorId": "Bhuvi",
+      "actorName": "Bhuvi",
+      "isDuplicate": true
+    },
+    "txHash": "MOCK_05eb38ad22ce4131",
+    "blockNumber": 0,
+    "timestamp": 1778770466663
+  },
+  {
+    "id": "cd187f31-cabd-45f7-b77e-475e6128527d",
+    "qrId": "d7264f2e-2c2e-457f-aa82-ca17ee456ec5",
+    "eventType": "SCAN",
+    "metadata": {
+      "role": "manufacturer",
+      "actorId": "Karan ",
+      "actorName": "Karan ",
+      "isDuplicate": false
+    },
+    "txHash": "MOCK_a1ae86981e78ea4e",
+    "blockNumber": 0,
+    "timestamp": 1778770547752
+  },
+  {
+    "id": "bbce8b2a-67cf-4628-9a7e-dde43aefc685",
+    "qrId": "d7264f2e-2c2e-457f-aa82-ca17ee456ec5",
+    "eventType": "SCAN",
+    "metadata": {
+      "role": "customer",
+      "actorId": "Karan Singh ",
+      "actorName": "Karan Singh ",
+      "isDuplicate": false
+    },
+    "txHash": "MOCK_5ab87e1d490f386d",
+    "blockNumber": 0,
+    "timestamp": 1778770576575
+  },
+  {
+    "id": "302510de-e565-4326-a54c-88f0b7c471d2",
+    "qrId": "d7264f2e-2c2e-457f-aa82-ca17ee456ec5",
+    "eventType": "SCAN_DUPLICATE",
+    "metadata": {
+      "role": "customer",
+      "actorId": "customer",
+      "actorName": "Customer",
+      "isDuplicate": true
+    },
+    "txHash": "MOCK_98ad93decfe781af",
+    "blockNumber": 0,
+    "timestamp": 1778770604929
+  },
+  {
+    "id": "808b66c1-299c-42fe-8fa0-b5b9463470e8",
+    "qrId": "d7264f2e-2c2e-457f-aa82-ca17ee456ec5",
+    "eventType": "CLAIM_DUPLICATE",
+    "metadata": {
+      "actorId": "Gagan",
+      "actorName": "Gagan",
+      "isDuplicate": true
+    },
+    "txHash": "MOCK_a40762128fae5935",
+    "blockNumber": 0,
+    "timestamp": 1778770639923
+  },
+  {
+    "id": "a68ee39e-5e85-4fae-89da-e6c1bf01e237",
+    "qrId": "168da3ca-7b44-4848-a506-a335e44849f4",
+    "eventType": "SCAN",
+    "metadata": {
+      "role": "manufacturer",
+      "actorId": "efbr",
+      "actorName": "efbr",
+      "isDuplicate": false
+    },
+    "txHash": "MOCK_9137e5cd716262e2",
+    "blockNumber": 0,
+    "timestamp": 1778770961753
+  },
+  {
+    "id": "3598169e-8116-46bd-9c83-47341718df36",
+    "qrId": "168da3ca-7b44-4848-a506-a335e44849f4",
+    "eventType": "SCAN",
+    "metadata": {
+      "role": "customer",
+      "actorId": "bhuvi",
+      "actorName": "bhuvi",
+      "isDuplicate": false
+    },
+    "txHash": "MOCK_b127f60a7a0cd8c7",
+    "blockNumber": 0,
+    "timestamp": 1778770981419
+  },
+  {
+    "id": "c9f4682a-4e87-47fd-9928-771932c0b312",
+    "qrId": "168da3ca-7b44-4848-a506-a335e44849f4",
+    "eventType": "CLAIM_DUPLICATE",
+    "metadata": {
+      "actorId": "gagan",
+      "actorName": "gagan",
+      "isDuplicate": true
+    },
+    "txHash": "MOCK_e51031623ac92aca",
+    "blockNumber": 0,
+    "timestamp": 1778771005477
   }
 ]

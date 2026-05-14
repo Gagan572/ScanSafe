@@ -1,12 +1,1 @@
-{
-  "/_app": "pages/_app.js",
-  "/_error": "pages/_error.js",
-  "/_document": "pages/_document.js",
-  "/manufacturer": "pages/manufacturer.js",
-  "/scan": "pages/scan.js",
-  "/api/claim": "pages/api/claim.js",
-  "/customer": "pages/customer.js",
-  "/": "pages/index.js",
-  "/api/products": "pages/api/products.js",
-  "/admin": "pages/admin.js"
-}
+{}

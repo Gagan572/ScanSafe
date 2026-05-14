@@ -30,5 +30,11 @@
     "name": "pen r",
     "sku": "uygyuhgyu",
     "batches": []
+  },
+  {
+    "id": "prod-da87b052-8773-45dd-950d-29a2449bcf80",
+    "name": "Gagan",
+    "sku": "738",
+    "batches": []
   }
 ]

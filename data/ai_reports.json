@@ -1,1 +1,13 @@
-[]
+[
+  {
+    "id": "327fc49b-8abe-425c-afb0-37c29687b945",
+    "imageHash": "a4a9bad6a82ce42b8a015bd6312085637a7db11bfa3344857c997fff5b13164f",
+    "verdict": "AUTHENTIC",
+    "confidence": 0.9179720709608601,
+    "reasons": [
+      "Image features look consistent with known product examples (simulated)."
+    ],
+    "annotatedImageUrl": "/uploads/ai_1778771082605_scansafe-168da3ca-7b44-4848-a506-a335e44849f4.png",
+    "createdAt": 1778771082611
+  }
+]
