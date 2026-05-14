@@ -75,10 +75,14 @@ export default function ManufacturerPage() {
   const selectedProduct = products.find((p) => p.id === productId);
 
   return (
-    <div className="page">
-      <h1>Manufacturer: Generate QR Codes</h1>
-      <div className="card">
-        <form onSubmit={onSubmit}>
+    <section className="manufacturer-page">
+      <div className="manufacturer-header">
+        <h1>Manufacturer QR Codes</h1>
+        <p>Create secure product QR codes that work from laptops, tablets, and phones on your network.</p>
+      </div>
+
+      <div className="card manufacturer-card">
+        <form className="manufacturer-form" onSubmit={onSubmit}>
           <label>
             Product
             <select
@@ -124,28 +128,30 @@ export default function ManufacturerPage() {
             />
           </label>
 
-          {error && <p style={{ color: 'red' }}>{error}</p>}
+          {error && <p className="text-error">{error}</p>}
 
           <button className="button" type="submit" disabled={loading}>
-            {loading ? 'Generating…' : 'Generate QR Codes'}
+            {loading ? 'Generating...' : 'Generate QR Codes'}
           </button>
         </form>
       </div>
 
       {result && (
-        <div className="card">
-          <h2>Generated QR Codes</h2>
-          <p>Printable sheet hint URL: {result.printableUrl}</p>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
+        <div className="card manufacturer-results">
+          <div className="manufacturer-results-header">
+            <h2>Generated QR Codes</h2>
+            <p>Printable sheet hint URL: {result.printableUrl}</p>
+          </div>
+
+          <div className="qr-grid">
             {result.qrcodes.map((q) => (
-              <div key={q.id} style={{ textAlign: 'center' }}>
-                <img src={q.qrUrl} alt={q.id} style={{ width: 160, height: 160 }} />
-                <div style={{ fontSize: 12, wordBreak: 'break-all', marginTop: 6 }}>{q.id}</div>
+              <div key={q.id} className="qr-card">
+                <img className="qr-image" src={q.qrUrl} alt={q.id} />
+                <div className="qr-id">{q.id}</div>
                 <a
                   href={q.qrUrl}
                   download={`scansafe-${q.id}.png`}
                   className="button button-secondary"
-                  style={{ marginTop: 8, fontSize: 12, padding: '6px 10px' }}
                 >
                   Download PNG
                 </a>
@@ -154,6 +160,6 @@ export default function ManufacturerPage() {
           </div>
         </div>
       )}
-    </div>
+    </section>
   );
 }

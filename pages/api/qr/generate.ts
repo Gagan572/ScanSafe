@@ -3,6 +3,20 @@ import { readJson, writeJson } from '../../../lib/fs';
 import type { Product, QRCodeRecord } from '../../../lib/types';
 import { createSignedQrRecord } from '../../../lib/qr';
 
+function getRequestAppUrl(req: NextApiRequest): string {
+  const forwardedProto = req.headers['x-forwarded-proto'];
+  const proto = Array.isArray(forwardedProto)
+    ? forwardedProto[0]
+    : forwardedProto || 'http';
+  const host = req.headers.host;
+
+  if (host) {
+    return `${proto}://${host}`;
+  }
+
+  return process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+}
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
@@ -28,9 +42,10 @@ export default async function handler(
     return res.status(400).json({ error: 'Unknown productId' });
   }
 
+  const appUrl = getRequestAppUrl(req);
   const records: QRCodeRecord[] = [];
   for (let i = 0; i < n; i += 1) {
-    const rec = await createSignedQrRecord({ productId, batchId });
+    const rec = await createSignedQrRecord({ productId, batchId, appUrl });
     records.push(rec);
   }
 
@@ -41,6 +56,6 @@ export default async function handler(
   return res.status(200).json({
     tokens: records.map((r) => r.token),
     qrcodes: records.map((r) => ({ id: r.id, qrUrl: r.qrUrl, token: r.token })),
-    printableUrl: '/manufacturer',
+    printableUrl: `${appUrl}/manufacturer`,
   });
 }

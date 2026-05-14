@@ -39,6 +39,7 @@ function getAppUrl(): string {
 export async function createSignedQrRecord(options: {
   productId?: string;
   batchId: string;
+  appUrl?: string;
 }): Promise<QRCodeRecord> {
   const id = uuidv4();
   const payload: TokenPayload = {
@@ -52,8 +53,9 @@ export async function createSignedQrRecord(options: {
   const signatureB64 = base64urlEncode(signature);
   const token = `${base64urlEncode(payloadStr)}.${signatureB64}`;
 
-  const urlToEncode = `${getAppUrl()}/api/qr/verify?token=${encodeURIComponent(token)}`;
-  const qrUrl = await QRCode.toDataURL(urlToEncode, { margin: 1, width: 256 });
+  const appUrl = options.appUrl || getAppUrl();
+  const urlToEncode = `${appUrl}/api/qr/verify?token=${encodeURIComponent(token)}`;
+  const qrUrl = await QRCode.toDataURL(urlToEncode, { margin: 4, width: 320 });
 
   const record: QRCodeRecord = {
     id,

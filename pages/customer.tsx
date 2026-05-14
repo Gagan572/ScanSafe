@@ -93,8 +93,8 @@ export default function CustomerPage() {
                 />
               </label>
 
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 10 }}>
-                <small style={{ color: '#9ca3af' }}>
+              <div className="scan-actions-row">
+                <small>
                   You can verify anonymously or provide details to claim this item.
                 </small>
                 <button
